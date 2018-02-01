@@ -9,8 +9,20 @@ const PORT = 3000;
 
 app.use(express.static("public"));
 
-mongoose.Promise = Promise:
-    mongoose.connect("mongodb://localhost/")
+mongoose.Promise = Promise;
+mongoose.connect("mongodb://localhost/news");
+const db = mongoose.connection;
+
+
+const Article = require("./models/Article.js");
+
+db.on("error", err => {
+    console.log("Mongoose error: ", err);
+});
+db.once("open", function () {
+    console.log("Mongoose connection successful.");
+});
+
 
 //GET route for loading main page - does nothing at this time
 app.get("/", (req, res) => {
@@ -25,7 +37,7 @@ app.get("/search", (req, res) => {
 
         $("div.no-skin").each((i, element) => {
 
-            let result = {};
+            let result = new Article(resp);
             //console.log($(element).children().attr("html"));
             result.title = $(this).children(".headline").text();
 
@@ -33,16 +45,28 @@ app.get("/search", (req, res) => {
 
             result.summary = $(this).children(".blurb").text();
 
-            db.Article.create(result);
+            result.save((error, doc) => {
+                if (error) {
+                    res.send(error);
+                }
+                // Otherwise, send the new doc to the browser
+                else {
+                    res.send(doc);
+                }
+
+            })
 
         })
+
     })
 })
 
 //GET route to retrieve all the articles
-app.get("/articles"), (req,res)=>{
+app.get("/articles"), (req, res) => {
     db.Article.find({})
-    .then((articles)=>{
-        res.json(articles)
-    })
+        .then((articles) => {
+            res.json(articles)
+        })
 }
+
+app.listen(PORT);

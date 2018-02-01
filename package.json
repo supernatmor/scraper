@@ -1,0 +1,30 @@
+{
+  "name": "washpost",
+  "version": "1.0.0",
+  "description": "MONGODB URI - mongodb://heroku_489m5pt5:vva3e16mt602qt5e8iivpt5pog@ds117888.mlab.com:17888/heroku_489m5pt5",
+  "main": "server.js",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^4.13.10",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supernatmor/scraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/supernatmor/scraper/issues"
+  },
+  "homepage": "https://github.com/supernatmor/scraper#readme"
+}
