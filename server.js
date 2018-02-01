@@ -10,18 +10,16 @@ const PORT = 3000;
 app.use(express.static("public"));
 
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/news");
-const db = mongoose.connection;
+mongoose.connect("mongodb://localhost/news", {
+    useMongoClient: true
+});
+
+
+const db = require("./models");
 
 
 const Article = require("./models/Article.js");
 
-db.on("error", err => {
-    console.log("Mongoose error: ", err);
-});
-db.once("open", function () {
-    console.log("Mongoose connection successful.");
-});
 
 
 //GET route for loading main page - does nothing at this time
@@ -37,24 +35,25 @@ app.get("/search", (req, res) => {
 
         $("div.no-skin").each((i, element) => {
 
-            let result = new Article(resp);
+            let result = {};
             //console.log($(element).children().attr("html"));
-            result.title = $(this).children(".headline").text();
+            result.title = $(element).children(".headline").text();
 
-            result.link = $(this).find("a").attr("href");
+            result.link = $(element).find("a").attr("href");
 
-            result.summary = $(this).children(".blurb").text();
+            result.summary = $(element).children(".blurb").text();
 
-            result.save((error, doc) => {
-                if (error) {
-                    res.send(error);
-                }
-                // Otherwise, send the new doc to the browser
-                else {
-                    res.send(doc);
-                }
-
-            })
+            //console.log(result);
+            db.Article
+            .create(result)
+            .then(function(dbArticle) {
+                // If we were able to successfully scrape and save an Article, send a message to the client
+                res.send("Scrape Complete");
+              })
+              .catch(function(err) {
+                // If an error occurred, send it to the client
+                res.json(err);
+              })
 
         })
 
