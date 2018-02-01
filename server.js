@@ -44,7 +44,8 @@ app.get("/search", (req, res) => {
             result.summary = $(element).children(".blurb").text();
 
             //console.log(result);
-            db.Article
+            if(result.title && result.link){
+                db.Article
             .create(result)
             .then(function(dbArticle) {
                 // If we were able to successfully scrape and save an Article, send a message to the client
@@ -54,6 +55,7 @@ app.get("/search", (req, res) => {
                 // If an error occurred, send it to the client
                 res.json(err);
               })
+            }
 
         })
 
