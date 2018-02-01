@@ -44,17 +44,20 @@ app.get("/search", (req, res) => {
             result.summary = $(element).children(".blurb").text();
 
             //console.log(result);
-            if(result.title && result.link){
+            if (result.title && result.link) {
+                console.log("ding");//dings when properly scraped
                 db.Article
-            .create(result)
-            .then(function(dbArticle) {
-                // If we were able to successfully scrape and save an Article, send a message to the client
-                res.send("Scrape Complete");
-              })
-              .catch(function(err) {
-                // If an error occurred, send it to the client
-                res.json(err);
-              })
+                    .create(result)
+                    .then(function (dbArticle) {
+                        // If we were able to successfully scrape and save an Article, send a message to the client
+                        res.send("Scrape Complete");
+                    })
+                // .catch(function(err) {
+                //     // If an error occurred, send it to the client
+                //     res.json(err);
+                // })
+            } else {
+                console.log("buzzer");//buzzer when not properly scraped
             }
 
         })
