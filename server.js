@@ -33,15 +33,15 @@ app.get("/search", (req, res) => {
         //loads html of page into cheerio then saves to $ for access later    
         const $ = cheerio.load(html);
 
-        $("div.no-skin").each((i, element) => {
+        $("div.headline").each((i, element) => {
 
             let result = {};
             //console.log($(element).children().attr("html"));
-            result.title = $(element).children(".headline").text();
+            result.title = $(element).text();
 
             result.link = $(element).find("a").attr("href");
 
-            result.summary = $(element).children(".blurb").text();
+            // result.summary = $(element).children(".blurb").text();
 
             //console.log(result);
             if (result.title && result.link) {
@@ -50,12 +50,13 @@ app.get("/search", (req, res) => {
                     .create(result)
                     .then(function (dbArticle) {
                         // If we were able to successfully scrape and save an Article, send a message to the client
-                        res.send("Scrape Complete");
+                        console.log("Scrape Complete");
+                        res.json(result);
                     })
-                // .catch(function(err) {
-                //     // If an error occurred, send it to the client
-                //     res.json(err);
-                // })
+                .catch(function(err) {
+                    // If an error occurred, send it to the client
+                    console.log(err);
+                })
             } else {
                 console.log("buzzer");//buzzer when not properly scraped
             }
